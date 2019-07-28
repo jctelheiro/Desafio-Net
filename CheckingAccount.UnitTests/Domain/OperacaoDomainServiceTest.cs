@@ -14,9 +14,9 @@ namespace CheckingAccount.UnitTests.Domain
         {
             return new List<Lancamento>
             {
-                new Lancamento(TipoLancamentoEnum.Credito, DateTime.Now.AddDays(-3), 1000),
-                new Lancamento(TipoLancamentoEnum.Debito, DateTime.Now.AddDays(-2), 200.56m),
-                new Lancamento(TipoLancamentoEnum.Debito, DateTime.Now.AddDays(-2), 99.44m)
+                new Lancamento(TipoLancamento.Credito, DateTime.Now.AddDays(-3), 1000),
+                new Lancamento(TipoLancamento.Debito, DateTime.Now.AddDays(-2), 200.56m),
+                new Lancamento(TipoLancamento.Debito, DateTime.Now.AddDays(-2), 99.44m)
             };
         }
 

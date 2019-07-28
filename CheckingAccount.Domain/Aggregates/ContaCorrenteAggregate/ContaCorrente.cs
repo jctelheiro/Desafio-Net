@@ -3,10 +3,12 @@ using CheckingAccount.Domain.Exceptions;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using CheckingAccount.Domain.SeedWork;
 
 namespace CheckingAccount.Domain.Aggregates.ContaCorrenteAggregate
 {
-    public class ContaCorrente
+    public class ContaCorrente 
+        : IAggregateRoot
     {
         private List<Lancamento> lancamentos = new List<Lancamento>();
 
@@ -30,12 +32,12 @@ namespace CheckingAccount.Domain.Aggregates.ContaCorrenteAggregate
             this.lancamentos.AddRange(lancamentos);
         }
 
-        public Guid Id { get; protected set; }
+        public Guid Id { get; private set; }
         
-        public Guid CorrentistaId { get; protected set; }
+        public Guid CorrentistaId { get; private set; }
 
         public void AdicionarLancamento(
-            TipoLancamentoEnum tipo,
+            TipoLancamento tipo,
             decimal valor,
             DateTime data)
         {
@@ -47,7 +49,7 @@ namespace CheckingAccount.Domain.Aggregates.ContaCorrenteAggregate
 
         public decimal Saldo => lancamentos.Sum(l =>
         {
-            if (l.TipoLancamento == TipoLancamentoEnum.Debito)
+            if (l.TipoLancamento == TipoLancamento.Debito)
             {
                 return (l.Valor * -1);
             }

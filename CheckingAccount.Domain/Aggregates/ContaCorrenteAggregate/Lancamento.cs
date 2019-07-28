@@ -1,12 +1,14 @@
 ﻿using CheckingAccount.Domain.Aggregates.ContaCorrenteAggregate;
+using CheckingAccount.Domain.SeedWork;
 using System;
+using System.Collections.Generic;
 
 namespace CheckingAccount.Domain.Aggregates.ContaCorrente
 {
-    public class Lancamento
+    public class Lancamento : ValueObject
     {
         public Lancamento(
-            TipoLancamentoEnum tipoLancamento,
+            TipoLancamento tipoLancamento,
             DateTime data,
             decimal valor)
         {
@@ -15,8 +17,15 @@ namespace CheckingAccount.Domain.Aggregates.ContaCorrente
             Data = data;
         }
 
-        public TipoLancamentoEnum TipoLancamento { get; protected set; }
-        public decimal Valor { get; protected set; }
-        public DateTime Data { get; protected set; }
+        public TipoLancamento TipoLancamento { get; private set; }
+        public decimal Valor { get; private set; }
+        public DateTime Data { get; private set; }
+
+        protected override IEnumerable<object> GetAtomicValues()
+        {
+            yield return TipoLancamento;
+            yield return Data;
+            yield return Valor;
+        }
     }
 }

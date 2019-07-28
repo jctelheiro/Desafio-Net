@@ -19,12 +19,12 @@ namespace CheckingAccount.Domain.Services
                 valorOperacao);
 
             contaOrigem.AdicionarLancamento(
-                TipoLancamentoEnum.Debito,
+                TipoLancamento.Debito,
                 valorOperacao,
                 data);
 
             contaDestino.AdicionarLancamento(
-                TipoLancamentoEnum.Credito,
+                TipoLancamento.Credito,
                 valorOperacao,
                 data);
         }
