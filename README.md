@@ -21,4 +21,4 @@ INFORMAÇÕES ADICIONAIS:
 
 •	TECNOLOGIAS QUE VOCÊ PODE UTILIZAR .NET CORE 2.X, C#, XUNITS (TESTES)
 
-Por favor, ler antes as considerações do arquivo README.TXT que está no projeto CheckAccount
+**Por favor, ler antes as considerações do arquivo README.TXT que está no projeto CheckAccount**
