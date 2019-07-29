@@ -1,5 +1,4 @@
-﻿using CheckingAccount.API.Application.Validations;
-using CheckingAccount.Domain.Aggregates.ContaCorrente;
+﻿using CheckingAccount.Domain.Aggregates.ContaCorrente;
 using CheckingAccount.Domain.Aggregates.ContaCorrenteAggregate;
 using CheckingAccount.Domain.SeedWork;
 using MediatR;
@@ -20,19 +19,21 @@ namespace CheckingAccount.API.Application.Commands
         private readonly IUnitOfWork _unitOfWork;
         private IEnumerable<Lancamento> GetLancamentos(decimal valor)
         {
-            if (valor > 0)
+            var tipoLancamento = TipoLancamento.Credito;
+            var valorLancamento = valor;
+
+            if (valor < 0)
             {
-                return new List<Lancamento> {
-                    new Lancamento(
-                    TipoLancamento.Credito,
-                    DateTime.Now,
-                    valor)
-                };
+                tipoLancamento = TipoLancamento.Debito;
+                valorLancamento = valorLancamento * -1;
             }
-            else
-            {
-                return null;
-            }
+
+            return new List<Lancamento> {
+                new Lancamento(
+                tipoLancamento,
+                DateTime.Now,
+                valorLancamento)
+            };
         }
 
         public CriarContaCorrenteCommandHandler(

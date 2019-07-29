@@ -1,5 +1,4 @@
-﻿using CheckingAccount.API.Application.Validations;
-using CheckingAccount.Domain.Aggregates.ContaCorrenteAggregate;
+﻿using CheckingAccount.Domain.Aggregates.ContaCorrenteAggregate;
 using CheckingAccount.Domain.SeedWork;
 using CheckingAccount.Domain.Services;
 using MediatR;

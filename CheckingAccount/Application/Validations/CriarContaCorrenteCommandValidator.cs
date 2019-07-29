@@ -1,7 +1,7 @@
 ﻿using CheckingAccount.API.Application.Commands;
 using FluentValidation;
 
-namespace CheckingAccount.API.Application.Validations
+namespace CheckingAccount.API.Application.Commands
 {
     public class CriarContaCorrenteCommandValidator :
         AbstractValidator<CriarContaCorrenteCommand>

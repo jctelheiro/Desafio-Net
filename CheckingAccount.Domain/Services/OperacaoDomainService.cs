@@ -31,7 +31,7 @@ namespace CheckingAccount.Domain.Services
 
         private void ValidarContas(ContaCorrente contaOrigem, ContaCorrente contaDestino)
         {
-            if (contaDestino.Id == contaOrigem.Id)
+            if (contaDestino == contaOrigem)
             {
                 throw new CheckingAccountDomainException("Conta de origem e destino devem ser diferentes para realizar esta operação");
             }

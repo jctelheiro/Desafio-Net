@@ -1,4 +1,4 @@
-﻿using CheckingAccount.API.Application.Validations;
+﻿using CheckingAccount.API.Application.Commands;
 using MediatR;
 using System;
 using System.Runtime.Serialization;

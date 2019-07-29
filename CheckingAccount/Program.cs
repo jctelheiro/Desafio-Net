@@ -18,8 +18,9 @@ namespace CheckingAccount
                 .CreateLogger();
             try
             {
-                Log.Information("CheckingAccount.API iniciado");
+                Log.Information("Microservice: CheckingAccount.API [iniciado]");
                 CreateWebHostBuilder(args).Build().Run();
+                Log.Information("Microservice: CheckingAccount.API [encerrado]");
             }
             catch (Exception ex)
             {
@@ -33,6 +34,7 @@ namespace CheckingAccount
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseKestrel()
                 .UseStartup<Startup>()
                 .UseSerilog();
     }

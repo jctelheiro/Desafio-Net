@@ -33,12 +33,25 @@ namespace CheckingAccount.API.Controllers
         {
             var commandResult = await _mediator.Send(criarContaCorrenteCommand);
 
+            _logger.LogInformation($"Comando: {nameof(CriarContaCorrenteCommand)} enviado");
+
             if (!commandResult.Success)
             {
                 return BadRequest(commandResult.Mensagem);
             }
 
             return CreatedAtAction(nameof(CriarContaCorrente), criarContaCorrenteCommand.Id);
+        }
+
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<ContaCorrenteViewModel[]>> ListarContasCorrentes()
+        {
+            var listarContaCorrenteCommand = new ListarContaCorrenteCommand();
+            var result = await _mediator.Send(listarContaCorrenteCommand);
+            _logger.LogInformation($"Comando: {nameof(ListarContaCorrenteCommand)} enviado");
+            return Ok(result);
         }
 
         [HttpGet]
@@ -49,6 +62,8 @@ namespace CheckingAccount.API.Controllers
         {
             var obterContaCorrenteCommand = new ObterContaCorrenteCommand(id);
             var result = await _mediator.Send(obterContaCorrenteCommand);
+
+            _logger.LogInformation($"Comando: {nameof(ObterContaCorrenteCommand)} enviado");
 
             if (result != null)
             {

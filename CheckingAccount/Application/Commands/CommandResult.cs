@@ -1,4 +1,4 @@
-﻿namespace CheckingAccount.API.Application.Validations
+﻿namespace CheckingAccount.API.Application.Commands
 {
     public class CommandResult
     {

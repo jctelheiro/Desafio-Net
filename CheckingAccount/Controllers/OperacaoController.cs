@@ -32,7 +32,7 @@ namespace CheckingAccount.API.Controllers
         {
             var commandResult = await _mediator.Send(efetuarOperacaoCommand);
 
-            _logger.LogInformation("Comando Enviado");
+            _logger.LogInformation($"Comando: {nameof(EfetuarOperacaoCommand)} enviado");
 
             if (!commandResult.Success)
             {

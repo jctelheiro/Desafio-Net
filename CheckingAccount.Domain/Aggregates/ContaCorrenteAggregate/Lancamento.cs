@@ -1,4 +1,5 @@
 ﻿using CheckingAccount.Domain.Aggregates.ContaCorrenteAggregate;
+using CheckingAccount.Domain.Exceptions;
 using CheckingAccount.Domain.SeedWork;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,11 @@ namespace CheckingAccount.Domain.Aggregates.ContaCorrente
             DateTime data,
             decimal valor)
         {
+            if (valor <= 0)
+            {
+                throw new CheckingAccountDomainException("O valor do lançamento deve ser maior que zero");
+            }
+
             TipoLancamento = tipoLancamento;
             Valor = valor;
             Data = data;

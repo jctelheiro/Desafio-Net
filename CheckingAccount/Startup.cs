@@ -2,6 +2,7 @@
 using AspNet.Security.ApiKey.Providers.Events;
 using AspNet.Security.ApiKey.Providers.Extensions;
 using CheckingAccount.API.Application.Behaviors;
+using CheckingAccount.API.Extensions;
 using CheckingAccount.Domain.Aggregates.ContaCorrenteAggregate;
 using CheckingAccount.Domain.SeedWork;
 using CheckingAccount.InfraStructure;
@@ -31,6 +32,7 @@ namespace CheckingAccount
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var secret_key_api = Configuration.GetValue<string>("Secret-Key-Api");
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
             services.AddSingleton<IUnitOfWork, UnitOfWorkFake>();
             services.AddSingleton<IContaCorrenteRepository, ContaCorrenteRepositoryInMemory>();
@@ -39,23 +41,23 @@ namespace CheckingAccount
                 options.DefaultScheme = ApiKeyDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = ApiKeyDefaults.AuthenticationScheme;
             }).AddApiKey(options =>
-            {
-                options.Header = "X-API-KEY";
-                options.HeaderKey = string.Empty;
-                options.Events = new ApiKeyEvents
                 {
-                    OnApiKeyValidated = context => 
+                    options.Header = "X-API-KEY";
+                    options.HeaderKey = string.Empty;
+                    options.Events = new ApiKeyEvents
                     {
-                        if (context.ApiKey == "teste")
+                        OnApiKeyValidated = context => 
                         {
-                            context.Principal = new ClaimsPrincipal();
-                            context.Success();
-                        }
+                            if (context.ApiKey == secret_key_api)
+                            {
+                                context.Principal = new ClaimsPrincipal();
+                                context.Success();
+                            }
 
-                        return Task.CompletedTask;  
-                    }
-                };
-            });
+                            return Task.CompletedTask;  
+                        }
+                    };
+                });
             services.AddMvc()
                 .AddFluentValidation(fvc => fvc.RegisterValidatorsFromAssemblyContaining<Startup>())
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -88,6 +90,7 @@ namespace CheckingAccount
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.LoadRepository();
             }
             else
             {
@@ -104,6 +107,6 @@ namespace CheckingAccount
             });
             app.UseHttpsRedirection();
             app.UseMvc();
-        }
+        }        
     }
 }

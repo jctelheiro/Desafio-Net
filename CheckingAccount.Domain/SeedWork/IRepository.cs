@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CheckingAccount.Domain.SeedWork
@@ -9,5 +10,6 @@ namespace CheckingAccount.Domain.SeedWork
         void Update(T aggregate);
         void Delete(T aggregate);
         Task<T> FindByIdAsync(Guid aggregateId);
+        Task<IEnumerable<T>> GetAll();
     }
 }

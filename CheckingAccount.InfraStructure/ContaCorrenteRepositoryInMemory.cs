@@ -1,6 +1,7 @@
 ﻿using CheckingAccount.Domain.Aggregates.ContaCorrenteAggregate;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CheckingAccount.InfraStructure
@@ -29,7 +30,10 @@ namespace CheckingAccount.InfraStructure
 
         public void Delete(ContaCorrente aggregate)
         {
-            throw new NotImplementedException();
+            if (contasCorrentes.ContainsKey(aggregate.Id))
+            {
+                contasCorrentes.Remove(aggregate.Id);
+            }
         }
 
         public Task<ContaCorrente> FindByIdAsync(Guid id)
@@ -41,6 +45,12 @@ namespace CheckingAccount.InfraStructure
                 result = contasCorrentes[id];
             }
 
+            return Task.FromResult(result);
+        }
+
+        public Task<IEnumerable<ContaCorrente>> GetAll()
+        {
+            var result = contasCorrentes.Values.AsEnumerable();
             return Task.FromResult(result);
         }
 

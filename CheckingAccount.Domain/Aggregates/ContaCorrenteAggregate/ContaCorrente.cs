@@ -8,14 +8,14 @@ using CheckingAccount.Domain.SeedWork;
 namespace CheckingAccount.Domain.Aggregates.ContaCorrenteAggregate
 {
     public class ContaCorrente 
-        : IAggregateRoot
+        : Entity, IAggregateRoot
     {
         private List<Lancamento> lancamentos = new List<Lancamento>();
 
         public ContaCorrente(
             Guid id,
             Guid correntistaId,
-            IEnumerable<Lancamento> lancamentos)
+            IEnumerable<Lancamento> lancamentos = null)
         {
             if (id == null || id == Guid.Empty)
             {
@@ -29,11 +29,13 @@ namespace CheckingAccount.Domain.Aggregates.ContaCorrenteAggregate
 
             Id = id;
             CorrentistaId = correntistaId;
-            this.lancamentos.AddRange(lancamentos);
+
+            if (lancamentos != null)
+            {
+                this.lancamentos.AddRange(lancamentos);
+            }
         }
 
-        public Guid Id { get; private set; }
-        
         public Guid CorrentistaId { get; private set; }
 
         public void AdicionarLancamento(
