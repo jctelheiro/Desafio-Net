@@ -22,14 +22,16 @@ namespace CheckingAccount.API.Application.Commands
         {
             if (valor > 0)
             {
-                yield return new Lancamento(
+                return new List<Lancamento> {
+                    new Lancamento(
                     TipoLancamento.Credito,
                     DateTime.Now,
-                    valor);
+                    valor)
+                };
             }
             else
             {
-                yield return null;
+                return null;
             }
         }
 

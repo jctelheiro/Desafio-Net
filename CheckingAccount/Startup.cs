@@ -1,4 +1,7 @@
-﻿using CheckingAccount.API.Application.Behaviors;
+﻿using AspNet.Security.ApiKey.Providers;
+using AspNet.Security.ApiKey.Providers.Events;
+using AspNet.Security.ApiKey.Providers.Extensions;
+using CheckingAccount.API.Application.Behaviors;
 using CheckingAccount.Domain.Aggregates.ContaCorrenteAggregate;
 using CheckingAccount.Domain.SeedWork;
 using CheckingAccount.InfraStructure;
@@ -9,7 +12,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Swagger;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace CheckingAccount
 {
@@ -28,13 +34,51 @@ namespace CheckingAccount
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
             services.AddSingleton<IUnitOfWork, UnitOfWorkFake>();
             services.AddSingleton<IContaCorrenteRepository, ContaCorrenteRepositoryInMemory>();
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = ApiKeyDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = ApiKeyDefaults.AuthenticationScheme;
+            }).AddApiKey(options =>
+            {
+                options.Header = "X-API-KEY";
+                options.HeaderKey = string.Empty;
+                options.Events = new ApiKeyEvents
+                {
+                    OnApiKeyValidated = context => 
+                    {
+                        if (context.ApiKey == "teste")
+                        {
+                            context.Principal = new ClaimsPrincipal();
+                            context.Success();
+                        }
+
+                        return Task.CompletedTask;  
+                    }
+                };
+            });
             services.AddMvc()
                 .AddFluentValidation(fvc => fvc.RegisterValidatorsFromAssemblyContaining<Startup>())
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddMediatR(typeof(Startup));
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "CheckingAccount API", Version = "v1" });
+            c.SwaggerDoc("v1", new Info {
+                Title = "CheckingAccount API",
+                Version = "v1" });
+
+                var s = new ApiKeyScheme
+                {
+                    Description = "Simples Header X-API-KEY",
+                    In = "header",
+                    Name = "X-API-KEY",
+                    Type = "apiKey" 
+                };
+
+                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
+                {
+                    { "ApiKeyAuth", new string[] { } }
+                });
+                c.AddSecurityDefinition("ApiKeyAuth", s);                
             });
         }
 
@@ -51,10 +95,11 @@ namespace CheckingAccount
                 app.UseHsts();
             }
 
+            app.UseAuthentication();
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "CheckingAccount API v1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "CheckingAccount API v1");                
                 c.RoutePrefix = string.Empty;
             });
             app.UseHttpsRedirection();

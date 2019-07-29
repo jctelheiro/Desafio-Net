@@ -1,6 +1,7 @@
 ﻿using CheckingAccount.API.Application.Commands;
 using CheckingAccount.API.Application.Models;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -11,6 +12,7 @@ namespace CheckingAccount.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ContaCorrenteController : ControllerBase
     {
         private readonly ILogger _logger;
