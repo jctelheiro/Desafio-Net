@@ -20,5 +20,5 @@ INFORMAÇÕES ADICIONAIS:
 •	SERÃO AVALIADOS CRITÉRIOS DE ARQUITETURA COMO SEPARAÇÃO DE RESPONSABILIDADE, CLEAN CODE, SEGURANÇA E TESTES
 
 •	TECNOLOGIAS QUE VOCÊ PODE UTILIZAR .NET CORE 2.X, C#, XUNITS (TESTES)
-
-**Por favor, ler antes as considerações do arquivo README.TXT que está no projeto CheckAccount**
+ 
+**Por favor, ler antes as considerações do arquivo README.TXT que está na pasta do projeto CheckingAccount**
